@@ -1,4 +1,7 @@
 import * as THREE from 'three'
+import image from '/src/assets/a.jpg';
+import fragment from './fragmentShader.glsl';
+import vertex from './vertexShader.glsl';
 
 let camera, scene, renderer;
 let geometry, material, mesh;
@@ -9,7 +12,7 @@ export default class Sketch {
   scene: THREE.Scene;
   time: number;
   geometry: THREE.PlaneGeometry;
-  material: THREE.MeshNormalMaterial;
+  material: THREE.ShaderMaterial;
   mesh: THREE.Mesh<typeof geometry, typeof material>;
 
   constructor() {
@@ -17,8 +20,8 @@ export default class Sketch {
     this.renderer.setSize( window.innerWidth, window.innerHeight );
     document.getElementById('container').appendChild( this.renderer.domElement );
 
-    this.camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 10 );
-    this.camera.position.z = 1;
+    this.camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 1000 );
+    this.camera.position.z = 700;
   
     this.scene = new THREE.Scene();
 
@@ -30,20 +33,26 @@ export default class Sketch {
   }
 
   addMesh() {
-    this.geometry = new THREE.PlaneBufferGeometry( 1, 1 );
-    this.material = new THREE.MeshNormalMaterial({side: THREE.DoubleSide});
+    const uniforms = {
+      u_texture: {value: new THREE.TextureLoader().load(image)}
+    }
+    this.geometry = new THREE.PlaneBufferGeometry( 800, 500, 100, 100);
+    this.material = new THREE.ShaderMaterial({
+      uniforms,
+      vertexShader: vertex,
+      fragmentShader: fragment,
+      side: THREE.DoubleSide,
+    });
 
     this.mesh = new THREE.Mesh( this.geometry, this.material );
     this.scene.add( this.mesh );
   }
 
   render() {
-    this.time++;
     this. mesh.rotation.x = this.time / 200;
     this. mesh.rotation.y = this.time / 100;
     console.log(this.time);
     this.renderer.render( this.scene, this.camera );
-    window.requestAnimationFrame(this.render.bind(this));
   }
 }
 

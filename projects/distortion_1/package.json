@@ -10,8 +10,9 @@
     "dev": "parcel"
   },
   "devDependencies": {
+    "@parcel/transformer-glsl": "^2.0.0",
     "@types/three": "^0.133.1",
-    "parcel": "^2.0.0"
+    "parcel": "^2.5.0"
   },
   "dependencies": {
     "three": "^0.133.1"
