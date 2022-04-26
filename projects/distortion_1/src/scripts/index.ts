@@ -34,14 +34,14 @@ export default class Sketch {
 
   addMesh() {
     const uniforms = {
-      u_texture: {value: new THREE.TextureLoader().load(image)}
-    }
-    this.geometry = new THREE.PlaneBufferGeometry( 800, 500, 100, 100);
+      u_texture: { value: new THREE.TextureLoader().load(image) },
+    };
+
+    this.geometry = new THREE.PlaneBufferGeometry( 500, 500, 100, 100);
     this.material = new THREE.ShaderMaterial({
       uniforms,
       vertexShader: vertex,
       fragmentShader: fragment,
-      side: THREE.DoubleSide,
     });
 
     this.mesh = new THREE.Mesh( this.geometry, this.material );
@@ -49,10 +49,8 @@ export default class Sketch {
   }
 
   render() {
-    this. mesh.rotation.x = this.time / 200;
-    this. mesh.rotation.y = this.time / 100;
-    console.log(this.time);
     this.renderer.render( this.scene, this.camera );
+    window.requestAnimationFrame(this.render.bind(this));
   }
 }
 
