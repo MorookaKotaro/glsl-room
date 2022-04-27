@@ -1,5 +1,8 @@
 import * as THREE from 'three'
+import gsap from 'gsap';
+
 import image from '/src/assets/a.jpg';
+import effectImage from '/src/assets/effect.jpg';
 import fragment from './fragmentShader.glsl';
 import vertex from './vertexShader.glsl';
 
@@ -18,8 +21,8 @@ export default class Sketch {
   constructor() {
     this.renderer = new THREE.WebGLRenderer( { antialias: true } );
     this.renderer.setSize( window.innerWidth, window.innerHeight );
-    document.getElementById('container').appendChild( this.renderer.domElement );
-
+    const canvas = document.getElementById('container');
+    canvas.appendChild( this.renderer.domElement );
     this.camera = new THREE.OrthographicCamera( - 1, 1, 1, - 1, 0, 1 );
     this.camera.position.z = 1;
   
@@ -29,15 +32,33 @@ export default class Sketch {
 
     this.time = 0;
 
+    canvas.addEventListener('mouseenter', () => {
+      console.log('enter');
+
+      gsap.to(this.material.uniforms.dispFactor, 1.5, {
+        value: 1
+      })
+    })
+
+    canvas.addEventListener('mouseleave', () => {
+      console.log('leave');
+      gsap.to(this.material.uniforms.dispFactor, 1.5, {
+        value: 0
+      })
+    })
+
     this.render();
   }
 
   addMesh() {
     const uniforms = {
       u_texture: { value: new THREE.TextureLoader().load(image) },
+      u_texture2: {value: new THREE.TextureLoader().load(effectImage)},
       resolution: { type: "v2", value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
       imageResolution: { type: 'v2', value: new THREE.Vector2(72, 72)},
+      dispFactor: { type: "f", value: 0.0 },
     };
+
 
     this.geometry = new THREE.PlaneBufferGeometry(4, 2);
     this.material = new THREE.ShaderMaterial({
