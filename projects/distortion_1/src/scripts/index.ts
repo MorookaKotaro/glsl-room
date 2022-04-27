@@ -20,8 +20,8 @@ export default class Sketch {
     this.renderer.setSize( window.innerWidth, window.innerHeight );
     document.getElementById('container').appendChild( this.renderer.domElement );
 
-    this.camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 1000 );
-    this.camera.position.z = 700;
+    this.camera = new THREE.OrthographicCamera( - 1, 1, 1, - 1, 0, 1 );
+    this.camera.position.z = 1;
   
     this.scene = new THREE.Scene();
 
@@ -35,9 +35,11 @@ export default class Sketch {
   addMesh() {
     const uniforms = {
       u_texture: { value: new THREE.TextureLoader().load(image) },
+      resolution: { type: "v2", value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+      imageResolution: { type: 'v2', value: new THREE.Vector2(72, 72)},
     };
 
-    this.geometry = new THREE.PlaneBufferGeometry( 500, 500, 100, 100);
+    this.geometry = new THREE.PlaneBufferGeometry(4, 2);
     this.material = new THREE.ShaderMaterial({
       uniforms,
       vertexShader: vertex,
