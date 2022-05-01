@@ -3,6 +3,7 @@ import gsap from 'gsap';
 
 import image from '/src/assets/a.jpg';
 import effectImage from '/src/assets/effect.jpg';
+import dispImage from '/src/assets/disp.jpg';
 import fragment from './fragmentShader.glsl';
 import vertex from './vertexShader.glsl';
 
@@ -36,14 +37,14 @@ export default class Sketch {
       console.log('enter');
 
       gsap.to(this.material.uniforms.dispFactor, 1.5, {
-        value: 1
+        value: 5
       })
     })
 
     canvas.addEventListener('mouseleave', () => {
       console.log('leave');
       gsap.to(this.material.uniforms.dispFactor, 1.5, {
-        value: 0
+        value: 1
       })
     })
 
@@ -53,7 +54,7 @@ export default class Sketch {
   addMesh() {
     const uniforms = {
       u_texture: { value: new THREE.TextureLoader().load(image) },
-      u_texture2: {value: new THREE.TextureLoader().load(effectImage)},
+      u_texture2: {value: new THREE.TextureLoader().load(dispImage)},
       resolution: { type: "v2", value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
       imageResolution: { type: 'v2', value: new THREE.Vector2(72, 72)},
       dispFactor: { type: "f", value: 0.0 },
@@ -72,6 +73,8 @@ export default class Sketch {
   }
 
   render() {
+    this.time++;
+    // this.material.uniforms.dispFactor.value = Math.sin(this.time / 10) + 2;
     this.renderer.render( this.scene, this.camera );
     window.requestAnimationFrame(this.render.bind(this));
   }
