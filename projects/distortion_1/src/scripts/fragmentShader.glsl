@@ -25,10 +25,10 @@ void main() {
 
   vec4 disp = texture2D(u_texture2, uv);
 
-  vec2 calcPosition = uv + rotate2d(PI) * vec2(disp.r, disp.g) * (dispFactor) * 0.1;
+  vec2 calcPosition = uv + rotate2d(PI) * vec2(disp.r, disp.g) * sin(dispFactor) * 0.1;
 
   vec4 _texture = texture2D(u_texture, calcPosition);
 
   // vec4 finalTexture = mix(_texture, _texture2, dispFactor);
-  gl_FragColor = _texture;
+  gl_FragColor = vec4(1.0 - _texture.g, 1.0 - _texture.g, 1.0 - _texture.g, 1.0);
 }
