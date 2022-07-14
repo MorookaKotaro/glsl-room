@@ -7,6 +7,12 @@ const nextConfig = {
       "@assets": "./public",
     });
 
+    config.module.rules.push({
+      test: /\.(glsl|frag|vert)$/,
+      use: [{ loader: "raw-loader" }, { loader: "glslify-loader" }],
+      exclude: /node_modules/,
+    });
+
     return config;
   },
 };
